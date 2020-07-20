@@ -63,7 +63,7 @@ class ScrapydProxy(SpiderServiceProxy):
         except:
             return False
 
-    def get_slave_spider_list(self, project_name):
+    def get_subordinate_spider_list(self, project_name):
         try:
             data = self.scrapyd_api.list_spiders(project_name)  # 列出指定工程下所有的爬虫名称
             return data if data else []

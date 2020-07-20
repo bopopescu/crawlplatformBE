@@ -21,14 +21,14 @@ def addmachine():
         serversmachine = Serversmachine()
         # 给server_ip字段赋值
         serversmachine.server_ip = request.form.get('server_ip')
-        # 给is_master字段赋值
-        serversmachine.is_master = request.form.get('is_master')
+        # 给is_main字段赋值
+        serversmachine.is_main = request.form.get('is_main')
         # 给server_status字段赋值
         serversmachine.server_status = request.form.get('server_status')
         # 保存数据
         db.session.add(serversmachine)
         db.session.commit()
-        agent.regist(ScrapydProxy(request.form.get('server_ip')), request.form.get('is_master'))
+        agent.regist(ScrapydProxy(request.form.get('server_ip')), request.form.get('is_main'))
         return json.dumps({'code': 200, 'data': 'success'})
     except Exception as e:
         return json.dumps({"code": 500, "status": "error", "msg": "添加错误"})
@@ -38,10 +38,10 @@ def addmachine():
 def listmachine():
     """
     功能: 列出所有的服务器
-    :return: 成功返回服务器信息列表,server_ip,is_master,server_status三个字段的信息, data的值格式如下:
+    :return: 成功返回服务器信息列表,server_ip,is_main,server_status三个字段的信息, data的值格式如下:
              [
              {'server_ip':'http://172.10.10.184:6800',
-             'is_master': '0',
+             'is_main': '0',
              'server_status': '1'}
              ]
              失败则返回空列表
@@ -72,14 +72,14 @@ def delmachine():
                 db.session.delete(machine)
                 db.session.commit()
                 machine_dict = machine.to_dict()
-                if machine_dict.get('is_master') == '1':
-                    for master_machine_instance in agent.spider_service_instances_master:
-                        if master_machine_instance._server == server_ip:
-                            agent.spider_service_instances_master.remove(master_machine_instance)
+                if machine_dict.get('is_main') == '1':
+                    for main_machine_instance in agent.spider_service_instances_main:
+                        if main_machine_instance._server == server_ip:
+                            agent.spider_service_instances_main.remove(main_machine_instance)
                 else:
-                    for slave_machine_instance in agent.spider_service_instances_slave:
-                        if slave_machine_instance._server == server_ip:
-                            agent.spider_service_instances_master.remove(slave_machine_instance)
+                    for subordinate_machine_instance in agent.spider_service_instances_subordinate:
+                        if subordinate_machine_instance._server == server_ip:
+                            agent.spider_service_instances_main.remove(subordinate_machine_instance)
         return json.dumps({'code': 200, 'data': 'success'})
     except Exception as e:
         return json.dumps({"code": 500, "status": "error", "msg": "删除错误"})

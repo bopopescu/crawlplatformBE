@@ -259,12 +259,12 @@ def get_history_spider_run_info():
     return json.dumps({"code": 200, 'data': spiders_info_list})
 
 
-@app.route("/masterlog",  methods=['get'])
-def masterlog():
+@app.route("/mainlog",  methods=['get'])
+def mainlog():
     project_id = request.args.get('project_id')
     job_exec_id = request.args.get('job_exec_id')
     job_execution = JobExecution.query.filter_by(project_id=project_id, service_job_execution_id=job_exec_id).first()
-    res = requests.get(agent.log_url_master(job_execution))
+    res = requests.get(agent.log_url_main(job_execution))
     res.encoding = 'utf8'
     raw = res.text.split('\n')
     if len(raw) > 300:
@@ -275,12 +275,12 @@ def masterlog():
     return json.dumps({"code": 200, 'log': raw.split('\n')})
 
 
-@app.route("/slavelog",  methods=['get'])
-def slavelog():
+@app.route("/subordinatelog",  methods=['get'])
+def subordinatelog():
     project_id = request.args.get('project_id')
     job_exec_id = request.args.get('job_exec_id')
     job_execution = JobExecution.query.filter_by(project_id=project_id, service_job_execution_id=job_exec_id).first()
-    res = requests.get(agent.log_url_slave(job_execution))
+    res = requests.get(agent.log_url_subordinate(job_execution))
     res.encoding = 'utf8'
     raw = res.text.split('\n')
     if len(raw) > 300:

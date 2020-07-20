@@ -63,20 +63,20 @@ def add_project():
             return json.dumps({"code": 500, "status": ' egg file are must'})
     else:
         # 获取上传文件
-        master_egg = request.files['master_egg']
-        slave_egg = request.files['slave_egg']
+        main_egg = request.files['main_egg']
+        subordinate_egg = request.files['subordinate_egg']
         # 判断表单是否传入文件
-        if master_egg and slave_egg:
-            master_filename = secure_filename(master_egg.filename)  # 获取master文件名
-            slave_filename = secure_filename(slave_egg.filename)  # 获取slave文件名
-            dst_master_egg = os.path.join(tempfile.gettempdir(), master_filename)  # 拼接文件路径
-            dst_slave_egg = os.path.join(tempfile.gettempdir(), slave_filename)  # 拼接文件路径
-            slave_egg.save(dst_slave_egg)  # 保存slave文件
-            master_egg.save(dst_master_egg)  # 保存master文件
-            egg_path_dict['master'] = dst_master_egg  # 将master项目文件路径保存到egg路径字典中
-            egg_path_dict['slave'] = dst_slave_egg  # 将slave项目文件路径保存到egg路径字典中
+        if main_egg and subordinate_egg:
+            main_filename = secure_filename(main_egg.filename)  # 获取main文件名
+            subordinate_filename = secure_filename(subordinate_egg.filename)  # 获取subordinate文件名
+            dst_main_egg = os.path.join(tempfile.gettempdir(), main_filename)  # 拼接文件路径
+            dst_subordinate_egg = os.path.join(tempfile.gettempdir(), subordinate_filename)  # 拼接文件路径
+            subordinate_egg.save(dst_subordinate_egg)  # 保存subordinate文件
+            main_egg.save(dst_main_egg)  # 保存main文件
+            egg_path_dict['main'] = dst_main_egg  # 将main项目文件路径保存到egg路径字典中
+            egg_path_dict['subordinate'] = dst_subordinate_egg  # 将subordinate项目文件路径保存到egg路径字典中
         else:  # 如果有一个没有上传文件
-            return json.dumps({"code": 500, "status": 'master and slave egg are must'})
+            return json.dumps({"code": 500, "status": 'main and subordinate egg are must'})
 
     if agent.deploy(project, egg_path_dict, is_msd):
         status = 'success'

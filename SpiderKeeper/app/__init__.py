@@ -99,7 +99,7 @@ def regist_server():
     machines = Serversmachine.query.all()
     for machine in machines:
         machine_dict = machine.to_dict()
-        agent.regist(ScrapydProxy(machine_dict['server_ip']), machine_dict.get("is_master"))
+        agent.regist(ScrapydProxy(machine_dict['server_ip']), machine_dict.get("is_main"))
 
 
 # ----------------- 注册各个模块的蓝本 -----------------#

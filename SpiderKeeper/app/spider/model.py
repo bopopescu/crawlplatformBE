@@ -59,7 +59,7 @@ class SpiderInstance(Base):
 
     spider_name = db.Column(db.String(100))
     project_id = db.Column(db.INTEGER, nullable=False, index=True)
-    spider_name_slave = db.Column(db.String(100))
+    spider_name_subordinate = db.Column(db.String(100))
 
     @classmethod
     def update_spider_instances(cls, project_id, spider_instance_list):
@@ -101,7 +101,7 @@ class SpiderInstance(Base):
     def to_dict(self):
         return dict(spider_instance_id=self.id,
                     spider_name=self.spider_name,
-                    spider_name_slave=self.spider_name_slave,
+                    spider_name_subordinate=self.spider_name_subordinate,
                     project_id=self.project_id)
 
     @classmethod
